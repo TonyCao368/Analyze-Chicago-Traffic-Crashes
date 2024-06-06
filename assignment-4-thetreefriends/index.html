@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="output.css" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;800&display=swap" rel="stylesheet">
+
+        <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    </head>
+    <body class="relative h-full">
+        <nav class="z-10 py-10 flex justify-center items-center h-16 space-x-4 font-medium container mx-auto px-4">
+            <a class="hover:text-gray-500" href="#single-view">Single</a>
+            <a class="hover:text-gray-500" href="#multi-view">Multiple</a>
+            <a class="hover:text-gray-500" href="#multi-linked-view">Multiple-Linked</a>
+            <a class="hover:text-gray-500" href="#spatial-view">Spatial</a>
+        </nav>
+        <header class="flex flex-col md:flex-row justify-between items-center max-w-5xl mx-auto md:h-[500px] text-center md:text-left px-4">
+            <div class="w-full max-w-xl py-6">
+                <h1 class="font-poppins text-6xl font-black uppercase mb-4">Traffic Crashes<sup>2</sup></h1>
+                <p class="text-lg text-gray-700 mb-6">Explore visualizations of traffic accidents in Chicago, rendered through VegaLite and based on insights from the <a class="underline hover:text-blue-500" href='https://data.cityofchicago.org/'>city's data portal</a>.</p>
+                <p class="text-xs text-gray-500">Note: It may take some time for the visualizations to load. Furthermore, the visualizations may be affected on mobile devices.</p>
+            </div>
+            <img src="image.png" alt="Crash" class="hidden md:block h-64 -z-10" />
+        </header>                 
+        <main class="flex justify-center flex-col items-center mb-10 text-center mx-auto">
+            <section id="single-view" class="container mx-auto px-4 py-6">
+                <hr class="border-gray-200 mb-6" />
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold mb-2">Traffic Crash Patterns in 2023</h2>
+                    <h4 class="text-sm uppercase font-semibold text-gray-500">Single View</h4>
+                </div>
+                <p>The visualization represents the daily crashes that start from January 1st to the last date of the collection. Each square represents a day in the calendar year. The more green the square is, the more crashes there are that day. The layout is arranged chronologically. This design facilitates the identification of patterns, trends, or anomalies in daily traffic crashes. This visualization not only provides an overview of traffic crash frequency throughout the year but also serves as a tool for identifying potential seasonal impacts. </p>
+                
+                <div id="single" class="mt-6 w-full"></div>
+            </section>
+            <section id="multi-view" class="container mx-auto px-4 py-6">
+                <hr class="border-gray-200 mb-6" />
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold mb-2">Interactive Map of Crashes by Police Beat</h2>
+                    <h4 class="text-sm uppercase font-semibold text-gray-500">Multi View</h4>
+                </div>
+                <p class="text-gray-700">These two visualizations combine to provide insights into the crashes per police beat and injuries based on speed limit.The first visualization is the choropleth. The choropleth will show the number of crashes and the speed limit at the beat numbers. By clicking on a beat on the choropleth, it will show the speed limits, crashes and beat number. The second visualization is the bar graph. It will categorize the data based on speed limit. By clicking on a bar, it will show the number of injuries for that posted speed limit. It should change the choropleth to show the beats on the choropleth with the same speed limit.</p>
+
+                <div id="multi" class="mt-6 flex items-center"></div>
+            </section>
+            <section id="multi-linked-view" class="container mx-auto px-4 py-6">
+                <hr class="border-gray-200 mb-6" />
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold mb-2">Crash Times</h2>
+                    <h4 class="text-sm uppercase font-semibold text-gray-500">Multi-Linked View</h4>
+                </div>
+                <p class="text-gray-700">These two visuals combine to provide insights into the crash hour and the severity of injuries, compared to crash records throughout the year. The first visualization is a dot plot that illustrates the crash hour and the severity of injuries. The second visualization is a multi line graph that shows the date and the number of crashes. The year can be changed by dragging a bar, and the road condition, lighting, and weather can be selected to alter both the conditions of the crash data accordingly. In addition to this, you can also brush on the dot plot to change the multi line graph to display the data only in the data selected.</p>
+
+                <div id="multi-linked" class="mt-6 w-full"></div>
+            </section>
+            <section id="spatial-view" class="container mx-auto px-4 py-6">
+                <hr class="border-gray-200 mb-6" />
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold mb-2">Distribution of Traffic Crashes</h2>
+                    <h4 class="text-sm uppercase font-semibold text-gray-500">Spatial View</h4>
+                </div>
+                <p>The visualization provides insights on the distribution of traffic crashes in Chicago neighborhoods. The visualization is a bubble map in which each bubble represents a number of crashes. The larger the bubble, the more crashes and the smaller the bubble, the less crashes. The bubble's size range from an estimate of an average of 2,000, 4,000, 6,000, 8,000 and 10,000 crashes.</p>
+                
+                <div id="spatial" class="mt-6 w-full"></div>
+            </section>
+        </main>
+        <footer class="pb-20 text-center">
+            <p class="text-sm font-medium">Made by The Tree Friends</p>
+        </footer>
+
+        <script>
+            function loadAndRenderVegaLite(url, elementId) {
+                fetch(url)
+                    .then(response => response.json())
+                    .then(spec => {
+                        vegaEmbed(`#${elementId}`, spec)
+                            .then(result => console.log("Rendering successful"))
+                            .catch(console.warn)
+                    })
+                    .catch(console.error)
+            }
+
+            loadAndRenderVegaLite('specs/multi-linked-view.json', 'multi-linked')
+            loadAndRenderVegaLite('specs/multi-view.json', 'multi')
+            loadAndRenderVegaLite('specs/single-view.json', 'single')
+            loadAndRenderVegaLite('specs/spatial-view.json', 'spatial')
+        </script>
+    </body>
+</html>
